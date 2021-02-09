@@ -79,14 +79,15 @@ router.get("/", authenticateJWT, (req, res) => {
 
 router.get("/:id", authenticateJWT, (req, res) => {
     const id = req.params.id;
-    User.findOne({_id: id}, function (err, user) {
-        if (err)
-            return console.log(err);
-        res.send(user);
-    });
+    User.findOne({_id: id}, )
+        .then((err, user) => {
+            res.send(user);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 });
-
-router.post("/", (req, res) => {
+router.post("/", authenticateJWT, (req, res) => {
     if (!req.body)
         return res.sendStatus(400);
     const login = req.body.login;
@@ -106,7 +107,7 @@ router.post("/", (req, res) => {
     });
 });
 
-router.put("/", (req, res) => {
+router.put("/", authenticateJWT, (req, res) => {
     if (!req.body)
         return res.sendStatus(400);
     const id = req.body.id;
@@ -128,7 +129,7 @@ router.put("/", (req, res) => {
     );
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", authenticateJWT, (req, res) => {
     const id = req.params.id;
     User.findByIdAndDelete(id, (err, user) => {
         if (err)
