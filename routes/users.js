@@ -79,11 +79,11 @@ router.get("/", authenticateJWT, (req, res) => {
 
 router.get("/:id", authenticateJWT, (req, res) => {
     const id = req.params.id;
-    User.findOne({_id: id}, )
-        .then((err, user) => {
+    User.findOne({_id: id})
+        .then(user => {
             res.send(user);
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
         });
 });
