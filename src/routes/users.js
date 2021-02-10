@@ -1,9 +1,11 @@
 import express from "express";
-import User from "../models/user.js";
 import jwt from "jsonwebtoken";
+
 import authenticateJWT from "../utils/authenticateJWT.js";
 import {accessTokenSecret} from "../config.js";
-import controller from "../controllers/user.controller";
+
+import User from "../models/user.js";
+import controller from "../controllers/user.controller.js";
 
 const router = express.Router();
 

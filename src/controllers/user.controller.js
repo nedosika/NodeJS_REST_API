@@ -1,4 +1,4 @@
-import User from "../models/user";
+import User from "../models/user.js";
 
 const getUser = (req, res) => {
     const id = req.params.id;
@@ -9,7 +9,7 @@ const getUser = (req, res) => {
         .catch(err => {
             console.log(err);
         });
-}
+};
 
 const getAllUsers = (req, res) => {
     User.find({})
@@ -19,8 +19,8 @@ const getAllUsers = (req, res) => {
         .catch(err => {
             console.log(err);
         });
-}
+};
 
-const controller = {getUser, getAllUsers}
+const controller = {getUser, getAllUsers};
 
 export default controller;
