@@ -34,11 +34,13 @@ const addUser = (req, res) => {
         name,
         role
     });
-    user.save((err) => {
-        if (err)
-            return console.log(err);
-        res.send(user);
-    });
+    user.save()
+        .then(user => {
+            res.send(user);
+        })
+        .catch(err => {
+            console.log(err)
+        });
 }
 
 const updateUser = (req, res) => {
@@ -54,22 +56,25 @@ const updateUser = (req, res) => {
     User.findOneAndUpdate(
         {_id: id},
         newUser,
-        {new: true},
-        (err, user) => {
-            if (err)
-                return console.log(err);
+        {new: true}
+    )
+        .then(user => {
             res.send(user);
-        }
-    );
+        })
+        .catch(err => {
+            console.log(err)
+        });
 };
 
 const removeUser = (req, res) => {
-    const id = req.params.id;
-    User.findByIdAndDelete(id, (err, user) => {
-        if (err)
-            return console.log(err);
-        res.send(user);
-    });
+    const id = req.body.id;
+    User.findByIdAndDelete(id)
+        .then(user => {
+            res.send(user);
+        })
+        .catch(err => {
+            console.log(err)
+        });
 }
 
 const controller = {
