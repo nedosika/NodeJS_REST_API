@@ -18,18 +18,22 @@ const signUp = (req, res) => {
         });
 
         // Attempt to save the user
-        newUser.save(function (err) {
-            if (err) {
-                return res.json({
-                    success: false,
-                    message: 'That login address already exists.'
+        newUser
+            .save()
+            .then(() => {
+                    res.json({
+                        success: true,
+                        message: 'Successfully created new user.'
+                    });
+                }
+            )
+            .catch(() => {
+                res.json({
+                        success: false,
+                        message: 'That login address already exists.'
+                    });
                 });
-            }
-            res.json({
-                success: true,
-                message: 'Successfully created new user.'
-            });
-        });
+
     }
 };
 
@@ -38,28 +42,31 @@ const signIn = (req, res) => {
     const {login, password} = req.body;
     console.log(req.body);
 
-    User.find({}, function (err, users) {
-        if (err)
+    User.find({})
+        .then(users => {
+                // filter user from the users array by username and password
+                const findedUser = users.find(u => {
+                    return u.login === login && u.password === password
+                });
+
+                if (findedUser) {
+                    // generate an access token
+                    const accessToken = jwt.sign({
+                        login: findedUser.login,
+                        role: findedUser.role
+                    }, accessTokenSecret, {expiresIn: '20m'});
+
+                    res.json({
+                        accessToken,
+                    });
+                } else {
+                    res.send('Username or password incorrect');
+                }
+            }
+        )
+        .catch(err => {
             return console.log(err);
-
-        // filter user from the users array by username and password
-        const findedUser = users.find(u => {
-            return u.login === login && u.password === password
-        });
-        if (findedUser) {
-            // generate an access token
-            const accessToken = jwt.sign({
-                login: findedUser.login,
-                role: findedUser.role
-            }, accessTokenSecret, {expiresIn: '20m'});
-
-            res.json({
-                accessToken,
-            });
-        } else {
-            res.send('Username or password incorrect');
-        }
-    });
+        })
 };
 
 const controller = {
