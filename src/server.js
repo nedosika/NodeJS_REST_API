@@ -20,11 +20,12 @@ mongoose.connect(
         useNewUrlParser: true,
         useFindAndModify: false
     })
-    .then(client => {
+    .then(() => {
         app.listen(port, () => {
             console.log(`Server ready connections on ${port}`);
         });
     })
-    .catch((err) => {
-        console.log(err)
+    .catch(err => {
+        console.log(err);
+        process.exit();
     });

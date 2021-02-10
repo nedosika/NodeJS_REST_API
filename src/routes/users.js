@@ -3,6 +3,7 @@ import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import authenticateJWT from "../utils/authenticateJWT.js";
 import {accessTokenSecret} from "../config.js";
+import controller from "../controllers/user.controller";
 
 const router = express.Router();
 
@@ -70,23 +71,9 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.get("/", authenticateJWT, (req, res) => {
-    User.find({}, function (err, users) {
-        if (err) return console.log(err);
-        res.send(users);
-    });
-});
+router.get("/", authenticateJWT, controller.getAllUsers);
+router.get("/:id", authenticateJWT, controller.getUser);
 
-router.get("/:id", authenticateJWT, (req, res) => {
-    const id = req.params.id;
-    User.findOne({_id: id})
-        .then(user => {
-            res.send(user);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-});
 router.post("/", authenticateJWT, (req, res) => {
     if (!req.body)
         return res.sendStatus(400);
